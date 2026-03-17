@@ -1,0 +1,1 @@
+# Stok-Takip-ve-Satis-Sistemi
