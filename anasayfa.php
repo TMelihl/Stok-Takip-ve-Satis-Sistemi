@@ -78,7 +78,7 @@ if (!isset($_SESSION['kullanici_adi'])) {
                         <div class="col-md-4">
                             <div class="card h-100 text-bg-success border-0 shadow-sm">
                                 <div class="card-body py-4">
-                                    <h4 class="card-title mb-3">📊 Stok Durumu</h4>
+                                    <h4 class="card-title mb-3">📊 Stok Durumu</h4> 
                                     <p class="card-text">Mevcut stoklarınızı detaylı olarak listeleyin ve kontrol edin.</p>
                                     <a href="#" class="btn btn-light mt-3 px-4">Git</a>
                                 </div>
