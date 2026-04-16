@@ -1,44 +1,63 @@
 <?php
-$db = new PDO("mysql:host=localhost;dbname=stok_takip;charset=utf8", "root", "");
+include "baglan.php";
+include "header.php";
 
-$sorgu = $db->query("SELECT * FROM kullanicilar");
-$kullanicilar = $sorgu->fetchAll(PDO::FETCH_ASSOC);
+if(!isset($_SESSION["kullanici_adi"]) || $_SESSION["rol"] != "yonetici") {
+    header("Location: anasayfa.php");
+    exit;
+}
+
+$kullanicilar = $db->query("SELECT * FROM kullanicilar")->fetchAll(PDO::FETCH_ASSOC);
 ?>
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kullanıcı Listesi - Stok Takip</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="bg-light">
 
-    <div class="container mt-4">
-        <h4 class="mb-3">👥 Kullanıcı Listesi</h4>
-
-        <table class="table table-bordered table-hover bg-white">
-            <thead class="table-dark">
-                <tr>
-                    <th>ID</th>
-                    <th>Kullanıcı Adı</th>
-                    <th>Ad Soyad</th>
-                    <th>Rol</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($kullanicilar as $kisi): ?>
-                <tr>
-                    <td><?php echo $kisi['id']; ?></td>
-                    <td><?php echo htmlspecialchars($kisi['kullanici_adi']); ?></td>
-                    <td><?php echo htmlspecialchars($kisi['ad_soyad']); ?></td>
-                    <td><?php echo $kisi['rol']; ?></td>
-                </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+    <div class="container">
+        <div class="card shadow-sm">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">👥 Sistemdeki Kullanıcılar</h5>
+                <a href="form.php" class="btn btn-info btn-sm text-white">+ Yeni Kayıt</a>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Ad Soyad</th>
+                            <th>Kullanıcı Adı</th>
+                            <th class="text-center">Rol</th>
+                            <th class="text-center">Durum</th>
+                            <th class="text-center">İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach($kullanicilar as $k): ?>
+                        <tr>
+                            <td><?= htmlspecialchars($k['ad_soyad']) ?></td>
+                            <td><?= htmlspecialchars($k['kullanici_adi']) ?></td>
+                            <td class="text-center">
+                                <span class="badge bg-secondary"><?= ucfirst($k['rol']) ?></span>
+                            </td>
+                            <td class="text-center">
+                                <?php if($k['aktif']): ?>
+                                    <span class="badge bg-success small">Aktif</span>
+                                <?php else: ?>
+                                    <span class="badge bg-danger small">Pasif</span>
+                                <?php endif; ?>
+                            </td>
+                            <td class="text-center">
+                                <!-- Güvenlik: Kullanıcı kendi kendini silemesin ve sadece yöneticiler silsin -->
+                                <?php if($_SESSION['rol'] == 'yonetici' && $k['kullanici_adi'] != $_SESSION['kullanici_adi']): ?>
+                                <a href="kullanici_sil.php?id=<?= $k['id'] ?>" 
+                                   class="btn btn-danger btn-sm" 
+                                   onclick="return confirm('Bu kullanıcıyı silmek istediğinize emin misiniz?')">
+                                   🗑️ Sil
+                                </a>
+                                <?php endif; ?>
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

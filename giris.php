@@ -1,84 +1,36 @@
 <?php
+$db = new PDO("mysql:host=localhost;dbname=stok_takip;charset=utf8", "root", "");
 session_start();
+if($_POST) {
+    $kadi = trim($_POST["kadi"]);
+    $sifre = $_POST["sifre"];
 
-try {
-    $db = new PDO("mysql:host=localhost;dbname=stok_takip;charset=utf8", "root", "");
-    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    die("Veritabanı bağlantı hatası: " . $e->getMessage());
-}
+    //kullanıcıları veri tabanından çekicem
+    $sorgu = $db->prepare("select * from kullanicilar where kullanici_adi = ?");
+    $sorgu->execute([$kadi]);
+    $kullanici = $sorgu->fetch(PDO::FETCH_ASSOC);
 
-$hata = "";
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $kadi = trim($_POST['kullanici_adi']);
-    $girilen_sifre = $_POST['sifre'];
-
-    if (empty($kadi) || empty($girilen_sifre)) {
-        $hata = "Kullanıcı adı ve şifre boş bırakılamaz!";
+    if($kullanici && password_verify($sifre, $kullanici["sifre"])) {
+        $_SESSION["kullanici_adi"] = $kullanici["kullanici_adi"];
+        $_SESSION["ad_soyad"] = $kullanici["ad_soyad"];
+        header("Location: anasayfa.php");
     } else {
-        $sorgu = $db->prepare("SELECT * FROM kullanicilar WHERE kullanici_adi = ?");
-        $sorgu->execute([$kadi]);
-        $kullanici = $sorgu->fetch(PDO::FETCH_ASSOC);
-
-        if ($kullanici) {
-            if (password_verify($girilen_sifre, $kullanici['sifre'])) {
-                $_SESSION['kullanici_adi'] = $kullanici['kullanici_adi'];
-                $_SESSION['rol'] = $kullanici['rol'];
-                $_SESSION['ad_soyad'] = $kullanici['ad_soyad'];
-                header("Location: anasayfa.php");
-                exit;
-            } else {
-                $hata = "Şifre yanlış!";
-            }
-        } else {
-            $hata = "Böyle bir kullanıcı bulunamadı!";
-        }
+        echo "Kullanıcı adı veya şifre hatalı";
     }
 }
 ?>
 <!DOCTYPE html>
-<html lang="tr">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Giriş Yap - Stok Takip</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background-color: #f8f9fa;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-        }
-        .login-card { width: 100%; max-width: 400px; }
-    </style>
+    <title>Giriş Yap</title>
 </head>
-<body>
-    <div class="login-card">
-        <div class="card shadow-sm p-4">
-            <h4 class="text-center mb-4 fw-bold">Stok Takip Sistemi</h4>
-
-            <?php if ($hata): ?>
-                <div class="alert alert-danger"><?php echo $hata; ?></div>
-            <?php endif; ?>
-
-            <form method="POST">
-                <div class="mb-3">
-                    <label class="form-label">Kullanıcı Adı</label>
-                    <input type="text" name="kullanici_adi" class="form-control" required autofocus>
-                </div>
-                <div class="mb-4">
-                    <label class="form-label">Şifre</label>
-                    <input type="password" name="sifre" class="form-control" required>
-                </div>
-                <div class="d-grid">
-                    <button type="submit" class="btn btn-primary btn-lg">Giriş Yap</button>
-                </div>
-            </form>
-        </div>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<body class="bg-light d-flex align-items-center justify-content-center" style="height:100vh;">
+    <form method="POST" class="card p-4 shadow-sm" style="width:300px;">
+        <h4 class="text-center mb-3">Sistem Girişi</h4>
+        <input type="text" name="kadi" class="form-control mb-2" placeholder="Kullanıcı Adı" required>
+        <input type="password" name="sifre" class="form-control mb-3" placeholder="Şifre" required>
+        <button type="submit" class="btn btn-primary w-100">Giriş Yap</button>
+    </form>
 </body>
 </html>
