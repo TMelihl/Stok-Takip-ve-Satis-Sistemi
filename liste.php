@@ -33,7 +33,10 @@ $kullanicilar = $db->query("SELECT * FROM kullanicilar")->fetchAll(PDO::FETCH_AS
                             <td><?= htmlspecialchars($k['ad_soyad']) ?></td>
                             <td><?= htmlspecialchars($k['kullanici_adi']) ?></td>
                             <td class="text-center">
-                                <span class="badge bg-secondary"><?= ucfirst($k['rol']) ?></span>
+                                <?php 
+                                    $turkceRoller = ['yonetici' => 'Yönetici', 'personel' => 'Personel', 'musteri' => 'Müşteri'];
+                                ?>
+                                <span class="badge bg-secondary"><?= $turkceRoller[$k['rol']] ?? ucfirst($k['rol']) ?></span>
                             </td>
                             <td class="text-center">
                                 <?php if($k['aktif']): ?>
