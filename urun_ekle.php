@@ -2,18 +2,18 @@
 include 'baglan.php';
 include 'header.php';
 
-if(!isset($_SESSION['kullanici_adi'])) {
+if (!isset($_SESSION['kullanici_adi'])) {
     header("Location: giris.php");
     exit;
 }
 
-if($_POST) {
+if ($_POST) {
     $ad = $_POST['urun_adi'];
     $stok = $_POST['stok_miktari'];
     $fiyat = $_POST['fiyat'];
 
     $sorgu = $db->prepare("INSERT INTO urunler (urun_adi, stok_miktari, fiyat) VALUES (?, ?, ?)");
-    if($sorgu->execute([$ad, $stok, $fiyat])) {
+    if ($sorgu->execute([$ad, $stok, $fiyat])) {
         echo "<script>alert('Ürün eklendi'); window.location='urunler.php';</script>";
     }
 }
@@ -33,4 +33,5 @@ if($_POST) {
 </div>
 
 </body>
+
 </html>

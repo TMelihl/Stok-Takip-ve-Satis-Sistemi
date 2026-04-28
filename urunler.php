@@ -2,7 +2,7 @@
 include 'baglan.php';
 include 'header.php';
 
-if(!isset($_SESSION['kullanici_adi'])) {
+if (!isset($_SESSION['kullanici_adi'])) {
     header("Location: giris.php");
     exit;
 }
@@ -15,7 +15,7 @@ $urunler = $db->query("SELECT * FROM urunler ORDER BY id DESC")->fetchAll(PDO::F
         <h4>📊 Güncel Ürün Listesi</h4>
         <a href="urun_ekle.php" class="btn btn-primary btn-sm">+ Yeni Ürün</a>
     </div>
-    
+
     <table class="table table-bordered bg-white shadow-sm">
         <thead class="table-dark">
             <tr>
@@ -26,20 +26,22 @@ $urunler = $db->query("SELECT * FROM urunler ORDER BY id DESC")->fetchAll(PDO::F
             </tr>
         </thead>
         <tbody>
-            <?php foreach($urunler as $urun): ?>
-            <tr>
-                <td><?= htmlspecialchars($urun['urun_adi']) ?></td>
-                <td><?= $urun['stok_miktari'] ?></td>
-                <td><?= number_format($urun['fiyat'], 2) ?> ₺</td>
-                <td class="text-center">
-                    <a href="urun_duzenle.php?id=<?= $urun['id'] ?>" class="btn btn-warning btn-sm">Düzenle</a>
-                    <a href="urun_sil.php?id=<?= $urun['id'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Silmek istediğine emin misin?')">Sil</a>
-                </td>
-            </tr>
+            <?php foreach ($urunler as $urun): ?>
+                <tr>
+                    <td><?= htmlspecialchars($urun['urun_adi']) ?></td>
+                    <td><?= $urun['stok_miktari'] ?></td>
+                    <td><?= number_format($urun['fiyat'], 2) ?> ₺</td>
+                    <td class="text-center">
+                        <a href="urun_duzenle.php?id=<?= $urun['id'] ?>" class="btn btn-warning btn-sm">Düzenle</a>
+                        <a href="urun_sil.php?id=<?= $urun['id'] ?>" class="btn btn-danger btn-sm"
+                            onclick="return confirm('Silmek istediğine emin misin?')">Sil</a>
+                    </td>
+                </tr>
             <?php endforeach; ?>
         </tbody>
     </table>
 </div>
 
 </body>
+
 </html>
