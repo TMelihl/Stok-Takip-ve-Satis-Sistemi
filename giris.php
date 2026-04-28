@@ -28,18 +28,19 @@ if ($_POST) {
     <title>Giriş Yap</title>
 </head>
 <body class="bg-light d-flex align-items-center justify-content-center" style="height:100vh;">
-    <form method="POST" class="card p-4 shadow-sm" style="width:300px;">
-        <h4 class="text-center mb-3">Sistem Girişi</h4>
+    
+    <form method="POST" class="card p-5 shadow-sm border-0" style="width:100%; max-width:450px; border-radius:12px;">
+        <h3 class="text-center mb-4">Sistem Girişi</h3>
 
         <?php if (isset($hata)): ?>
-            <div class="alert alert-danger text-center p-2 mb-3" style="font-size: 14px;">
+            <div class="alert alert-danger text-center p-2 mb-4" style="font-size: 15px;">
                 Uyarı : <?= $hata ?>
             </div>
         <?php endif; ?>
 
-        <input type="text" name="kadi" class="form-control mb-2" placeholder="Kullanıcı Adı" required>
-        <input type="password" name="sifre" class="form-control mb-3" placeholder="Şifre" required>
-        <button type="submit" class="btn btn-primary w-100">Giriş Yap</button>
+        <input type="text" name="kadi" class="form-control form-control-lg mb-3" placeholder="Kullanıcı Adı" required>
+        <input type="password" name="sifre" class="form-control form-control-lg mb-4" placeholder="Şifre" required>
+        <button type="submit" class="btn btn-primary btn-lg w-100">Giriş Yap</button>
     </form>
 </body>
 </html>
