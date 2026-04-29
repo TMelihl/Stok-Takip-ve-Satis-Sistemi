@@ -7,7 +7,6 @@ if (!isset($_SESSION['kullanici_adi'])) {
     exit;
 }
 
-// Karmaşık JOIN sorgusu: Sipariş, Ürünler, ve iki farklı Kullanıcı (Müşteri ve İşlem Yapan)
 $sorguText = "
 SELECT 
     s.*, 
@@ -22,12 +21,10 @@ LEFT JOIN kullanicilar iy ON s.islem_yapan_id = iy.id
 ";
 
 if ($_SESSION['rol'] == 'musteri') {
-    // Müşteriyse sadece kendi siparişlerini görür
     $sorguText .= " WHERE s.musteri_id = ? ORDER BY s.id DESC";
     $sorgu = $db->prepare($sorguText);
     $sorgu->execute([$_SESSION['kullanici_id']]);
 } else {
-    // Personel/Yönetici ise tüm siparişleri görür
     $sorguText .= " ORDER BY s.id DESC";
     $sorgu = $db->prepare($sorguText);
     $sorgu->execute();
@@ -39,7 +36,7 @@ $siparisler = $sorgu->fetchAll(PDO::FETCH_ASSOC);
     <div class="d-flex justify-content-between mb-3 align-items-center">
         <h4>📦 Sipariş Yönetimi</h4>
     </div>
-    
+
     <div class="table-responsive">
         <table class="table table-bordered bg-white shadow-sm align-middle">
             <thead class="table-dark">
@@ -67,7 +64,7 @@ $siparisler = $sorgu->fetchAll(PDO::FETCH_ASSOC);
                         <td><span class="badge bg-secondary"><?= $sip['adet'] ?> Adet</span></td>
                         <td><b class="text-success"><?= number_format($sip['toplam_tutar'], 2) ?> ₺</b></td>
                         <td><small class="text-muted"><?= date('d.m.Y H:i', strtotime($sip['tarih'])) ?></small></td>
-                        
+
                         <!-- Durum Rozetleri -->
                         <td>
                             <?php if ($sip['durum'] == 'Beklemede'): ?>

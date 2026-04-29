@@ -11,35 +11,50 @@ $urunler = $db->query("SELECT * FROM urunler ORDER BY id DESC")->fetchAll(PDO::F
 ?>
 
 <div class="container">
+    <?php 
+    if(isset($_GET['islem'])): ?>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>Başarılı!</strong> 
+            <?php 
+                if($_GET['islem'] == 'eklendi') echo "Yeni ürün sisteme başarıyla eklendi.";
+                if($_GET['islem'] == 'guncellendi') echo "Ürün bilgileri başarıyla güncellendi.";
+            ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <?php endif; ?>
+
     <div class="d-flex justify-content-between mb-3 align-items-center">
         <h4>📊 Güncel Ürün Listesi</h4>
         <?php if($_SESSION['rol'] != 'musteri'): ?>
         <a href="urun_ekle.php" class="btn btn-primary btn-sm">+ Yeni Ürün</a>
         <?php endif; ?>
     </div>
-    
+
     <table class="table table-bordered bg-white shadow-sm">
         <thead class="table-dark">
             <tr>
                 <th>Ürün Adı</th>
                 <th>Stok</th>
                 <th>Fiyat</th>
-                <!-- HOCA KODLARI YAZARKEN YENİ BİR TABLO SÜTUNU İSTERSE BURAYA BAŞLIĞINI EKLE. Örn: <th>Açıklama</th> -->
                 <th width="150" class="text-center">İşlemler</th>
             </tr>
         </thead>
         <tbody>
             <?php foreach ($urunler as $urun): ?>
+
                 <tr class="<?= ($urun['stok_miktari'] < 5) ? 'table-danger' : '' ?>">
+
                     <td><?= htmlspecialchars($urun['urun_adi']) ?></td>
+
                     <td>
                         <?= $urun['stok_miktari'] ?>
                         <?php if($urun['stok_miktari'] < 5): ?>
                             <span class="badge bg-danger">Kritik Stok!</span>
                         <?php endif; ?>
                     </td>
+
                     <td><?= number_format($urun['fiyat'], 2) ?> ₺</td>
-                    <!-- HOCA YENİ SÜTUNUN VERİSİNİN GÖSTERİLMESİNİ İSTERSE BURAYA EKLE. Örn: <td><?= $urun['aciklama'] ?></td> -->
+
                     <td class="text-center">
                         <?php if($_SESSION['rol'] != 'musteri'): ?>
                             <a href="urun_duzenle.php?id=<?= $urun['id'] ?>" class="btn btn-warning btn-sm">Düzenle</a>

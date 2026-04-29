@@ -2,7 +2,6 @@
 include "baglan.php";
 include "header.php";
 
-// Sadece müşteriler sipariş verebilir
 if (!isset($_SESSION['kullanici_adi']) || $_SESSION['rol'] != 'musteri') {
     header("Location: anasayfa.php");
     exit;
@@ -30,7 +29,7 @@ if ($_POST) {
     }
 
     $adet = (int)$_POST['adet'];
-    
+
     if ($adet > $urun['stok_miktari']) {
         $hata = "Maalesef stoklarımızda sadece " . $urun['stok_miktari'] . " adet bulunmaktadır.";
     } elseif ($adet <= 0) {
@@ -38,7 +37,7 @@ if ($_POST) {
     } else {
         $toplam_tutar = $adet * $urun['fiyat'];
         $musteri_id = $_SESSION['kullanici_id'];
-        
+
         $siparis = $db->prepare("INSERT INTO siparisler (urun_id, musteri_id, adet, toplam_tutar) VALUES (?, ?, ?, ?)");
         if ($siparis->execute([$urun_id, $musteri_id, $adet, $toplam_tutar])) {
             echo "<script>alert('Siparişiniz başarıyla alındı! Yönetici onayı bekliyor.'); window.location='siparisler.php';</script>";
@@ -52,7 +51,7 @@ if ($_POST) {
     <div class="card p-4 shadow-sm border-0">
         <h4 class="text-center">🛒 Sipariş Ver</h4>
         <hr>
-        
+
         <?php if (isset($hata)): ?>
             <div class="alert alert-danger text-center p-2 mb-3" style="font-size: 14px;">
                 ⚠️ <?= $hata ?>
@@ -70,7 +69,7 @@ if ($_POST) {
                 <label class="form-label">Kaç Adet İstiyorsunuz?</label>
                 <input type="number" name="adet" class="form-control form-control-lg text-center" value="1" min="1" max="<?= $urun['stok_miktari'] ?>" required>
             </div>
-            
+
             <div class="d-grid gap-2">
                 <button type="submit" class="btn btn-success btn-lg">Siparişi Tamamla</button>
                 <a href="urunler.php" class="btn btn-outline-secondary">İptal Et</a>

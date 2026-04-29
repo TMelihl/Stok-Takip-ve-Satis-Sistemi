@@ -1,8 +1,6 @@
 <?php
 include "baglan.php";
 
-if (session_status() == PHP_SESSION_NONE) { session_start(); }
-
 if(!isset($_SESSION['kullanici_adi']) || $_SESSION['rol'] == 'musteri') {
     header("Location: urunler.php");
     exit;

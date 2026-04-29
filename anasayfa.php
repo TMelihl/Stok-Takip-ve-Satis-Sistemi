@@ -11,13 +11,13 @@ if(!isset($_SESSION['kullanici_adi'])) {
     exit;
 }
 
-// İstatistikleri çekelim
+
 $toplamUrun = $db->query("SELECT COUNT(*) FROM urunler")->fetchColumn();
 $bekleyenSiparis = $db->query("SELECT COUNT(*) FROM siparisler WHERE durum = 'Beklemede'")->fetchColumn();
 ?>
 
 <div class="container mt-5">
-    <!-- İstatistik Paneli -->
+    <!-- İstatistik -->
     <div class="row mb-4">
         <div class="col-md-6">
             <div class="card bg-primary text-white p-3 shadow-sm border-0">
@@ -53,7 +53,7 @@ $bekleyenSiparis = $db->query("SELECT COUNT(*) FROM siparisler WHERE durum = 'Be
             </div>
         </div>
         <?php endif; ?>
-        <!-- Ürünler Kartı -->
+        <!-- Ürün-->
         <div class="col-md-4">
             <div class="card p-4 shadow-sm border-0">
                 <div class="display-4 mb-2">📦</div>
@@ -63,7 +63,7 @@ $bekleyenSiparis = $db->query("SELECT COUNT(*) FROM siparisler WHERE durum = 'Be
             </div>
         </div>
 
-        <!-- Siparişler Kartı -->
+        <!-- Sipariş -->
         <div class="col-md-4">
             <div class="card p-4 shadow-sm border-0">
                 <div class="display-4 mb-2">🛒</div>

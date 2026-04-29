@@ -2,7 +2,6 @@
 include "baglan.php";
 include "header.php";
 
-// Admin emmi görür
 if($_SESSION['rol'] != 'yonetici') {
     echo "Bu sayfaya yetkiniz yok!";
     exit;
@@ -11,18 +10,13 @@ if($_SESSION['rol'] != 'yonetici') {
 if($_POST) {
     $ad = $_POST['ad'];
     $kadi = $_POST['kadi'];
-    
-    // HOCA "ŞİFRELERİ NASIL GÜVENDE TUTUYORSUN?" DİYE SORARSA (ŞİFRELEME MANTIĞI):
-    // Cevap: Sisteme yeni bir kullanıcı eklerken onun şifresini veritabanına asla '1234' gibi okunan düz bir metin (plain text) olarak kaydetmiyorum. 
-    // PHP'nin "password_hash" adlı çok güçlü ve geri döndürülemez (tek yönlü) kriptolama algoritmasını kullanıyorum. 
-    // Bu kod '1234' değerini alır, karmaşık (örneğin: $2y$10$f3D4p...) kriptolu şifreye bağlar. Veritabanım çalınsa veya hacklense dahi, hackerlar şifrelerin ne olduğunu asla bilemez.
+
     $sifre = password_hash($_POST['sifre'], PASSWORD_DEFAULT); 
-    
+
     $rol = $_POST['rol'];
-    
-    
+
     $sql = "INSERT INTO kullanicilar (kullanici_adi, sifre, ad_soyad, rol) VALUES ('$kadi', '$sifre', '$ad', '$rol')";
-    
+
     if($db->query($sql)) {
         echo "<script>alert('Kullanıcı eklendi');</script>";
     }
@@ -36,13 +30,13 @@ if($_POST) {
         <form method="post">
              Kullanıcı Adı: <br>
             <input type="text" name="kadi" class="form-control" required>
-            
+
             Şifre: <br>
             <input type="password" name="sifre" class="form-control" required>
-            
+
             Ad Soyad: <br>
             <input type="text" name="ad" class="form-control" required>
-            
+
             Yetki: <br>
             <select name="rol" class="form-select">
                 <option value="personel">Personel</option>
