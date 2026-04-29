@@ -3,9 +3,6 @@ include 'baglan.php';
 include 'header.php';
 
 
-// HOCA SORARSA: Sayfanın en üstündeki bu kod ne işe yarar? Neden yazdın?
-// Bu kod sayfanın güvenlik kapısıdır. Session (Oturum) cüzdanına bakar, eğer giriş yapmış birisi yoksa (kullanici_adi boşsa),
-// URL çubuğuna doğrudan "anasayfa.php" yazıp sızmaya çalışan kişiyi anında giris.php'ye postalar (header Location).
 if(!isset($_SESSION['kullanici_adi'])) {
     header("Location: giris.php");
     exit;
