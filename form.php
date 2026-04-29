@@ -11,7 +11,13 @@ if($_SESSION['rol'] != 'yonetici') {
 if($_POST) {
     $ad = $_POST['ad'];
     $kadi = $_POST['kadi'];
-    $sifre = $_POST['sifre']; 
+    
+    // HOCA "ŞİFRELERİ NASIL GÜVENDE TUTUYORSUN?" DİYE SORARSA (ŞİFRELEME MANTIĞI):
+    // Cevap: Sisteme yeni bir kullanıcı eklerken onun şifresini veritabanına asla '1234' gibi okunan düz bir metin (plain text) olarak kaydetmiyorum. 
+    // PHP'nin "password_hash" adlı çok güçlü ve geri döndürülemez (tek yönlü) kriptolama algoritmasını kullanıyorum. 
+    // Bu kod '1234' değerini alır, karmaşık (örneğin: $2y$10$f3D4p...) kriptolu şifreye bağlar. Veritabanım çalınsa veya hacklense dahi, hackerlar şifrelerin ne olduğunu asla bilemez.
+    $sifre = password_hash($_POST['sifre'], PASSWORD_DEFAULT); 
+    
     $rol = $_POST['rol'];
     
     

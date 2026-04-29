@@ -26,7 +26,10 @@ CREATE TABLE IF NOT EXISTS siparisler (
     adet INT DEFAULT 1,
     toplam_tutar DECIMAL(10,2),
     durum ENUM('Beklemede', 'Onaylandı', 'Reddedildi') DEFAULT 'Beklemede',
+    islem_yapan_id INT NULL,
+    islem_tarihi TIMESTAMP NULL,
     tarih TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (urun_id) REFERENCES urunler(id),
-    FOREIGN KEY (musteri_id) REFERENCES kullanicilar(id)
+    FOREIGN KEY (musteri_id) REFERENCES kullanicilar(id),
+    FOREIGN KEY (islem_yapan_id) REFERENCES kullanicilar(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
