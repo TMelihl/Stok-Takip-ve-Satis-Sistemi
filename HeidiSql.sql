@@ -1,4 +1,3 @@
--- Kullanıcı Tablosu
 CREATE TABLE IF NOT EXISTS kullanicilar (
     id INT AUTO_INCREMENT PRIMARY KEY,
     kullanici_adi VARCHAR(100) NOT NULL UNIQUE,
@@ -7,8 +6,6 @@ CREATE TABLE IF NOT EXISTS kullanicilar (
     rol ENUM('yonetici', 'personel', 'musteri') NOT NULL DEFAULT 'personel',
     olusturma_tarihi TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- Ürün Tablosu
 CREATE TABLE IF NOT EXISTS urunler (
     id INT AUTO_INCREMENT PRIMARY KEY,
     urun_adi VARCHAR(255) NOT NULL,
@@ -17,8 +14,6 @@ CREATE TABLE IF NOT EXISTS urunler (
     kategori VARCHAR(100),
     guncelleme_tarihi TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- Sipariş Tablosu
 CREATE TABLE IF NOT EXISTS siparisler (
     id INT AUTO_INCREMENT PRIMARY KEY,
     urun_id INT,

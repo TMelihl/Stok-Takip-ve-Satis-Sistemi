@@ -1,16 +1,13 @@
 <?php
 include 'baglan.php';
 include 'header.php';
-
 if (!isset($_SESSION['kullanici_adi'])) {
     header("Location: giris.php");
     exit;
 }
-
 if ($_POST) {
     $yeni_sifre = $_POST['sifre'];
     $sifre_onay = $_POST['sifre_onay'];
-
     if ($yeni_sifre !== $sifre_onay) {
         $hata = "Şifreler birbiriyle uyuşmuyor!";
     } elseif (strlen($yeni_sifre) < 4) {
@@ -26,25 +23,21 @@ if ($_POST) {
     }
 }
 ?>
-
 <div class="container" style="max-width: 450px;">
     <div class="card p-4 shadow-sm border-0 mt-5">
         <h4 class="text-center mb-4">👤 Profil Ayarları</h4>
         <p class="text-center text-muted small">Buradan giriş şifrenizi güncelleyebilirsiniz.</p>
         <hr>
-
         <?php if (isset($hata)): ?>
             <div class="alert alert-danger text-center p-2 mb-3" style="font-size: 14px;">
                 ⚠️ <?= $hata ?>
             </div>
         <?php endif; ?>
-
         <?php if (isset($mesaj)): ?>
             <div class="alert alert-success text-center p-2 mb-3" style="font-size: 14px;">
                 ✅ <?= $mesaj ?>
             </div>
         <?php endif; ?>
-
         <form method="POST">
             <div class="mb-3">
                 <label class="form-label small">Yeni Şifre:</label>
@@ -59,6 +52,5 @@ if ($_POST) {
         </form>
     </div>
 </div>
-
 </body>
 </html>

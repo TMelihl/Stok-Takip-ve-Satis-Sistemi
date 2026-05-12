@@ -2,26 +2,24 @@
 include 'baglan.php';
 include 'header.php';
 
-
 if(!isset($_SESSION['kullanici_adi'])) {
     header("Location: giris.php");
     exit;
 }
-
 
 $toplamUrun = $db->query("SELECT COUNT(*) FROM urunler")->fetchColumn();
 $bekleyenSiparis = $db->query("SELECT COUNT(*) FROM siparisler WHERE durum = 'Beklemede'")->fetchColumn();
 ?>
 
 <div class="container mt-5">
-    <!-- İstatistik -->
     <div class="row mb-4">
         <div class="col-md-6">
             <div class="card bg-primary text-white p-3 shadow-sm border-0">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
-                        <h6 class="mb-0">Toplam Ürün</h6>
+                        <h6 class="mb-0">Toplam Ürün Çeşitliliği</h6>
                         <h2 class="mb-0"><?= $toplamUrun ?></h2>
+                        <small>Sistemdeki farklı model sayısı</small>
                     </div>
                     <div class="display-6">📦</div>
                 </div>
@@ -31,14 +29,16 @@ $bekleyenSiparis = $db->query("SELECT COUNT(*) FROM siparisler WHERE durum = 'Be
             <div class="card bg-warning text-dark p-3 shadow-sm border-0">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
-                        <h6 class="mb-0">Bekleyen Sipariş</h6>
+                        <h6 class="mb-0">Bekleyen Onaylar</h6>
                         <h2 class="mb-0"><?= $bekleyenSiparis ?></h2>
+                        <small>Onay bekleyen siparişler</small>
                     </div>
-                    <div class="display-6">⏳</div>
+                    <div class="display-6">🔔</div>
                 </div>
             </div>
         </div>
     </div>
+
     <div class="row text-center g-4">
         <?php if($_SESSION['rol'] != 'musteri'): ?>
         <div class="col-md-4">
@@ -50,7 +50,6 @@ $bekleyenSiparis = $db->query("SELECT COUNT(*) FROM siparisler WHERE durum = 'Be
             </div>
         </div>
         <?php endif; ?>
-        <!-- Ürün-->
         <div class="col-md-4">
             <div class="card p-4 shadow-sm border-0">
                 <div class="display-4 mb-2">📦</div>
@@ -59,8 +58,6 @@ $bekleyenSiparis = $db->query("SELECT COUNT(*) FROM siparisler WHERE durum = 'Be
                 <a href="urunler.php" class="btn btn-outline-primary btn-sm">Git</a>
             </div>
         </div>
-
-        <!-- Sipariş -->
         <div class="col-md-4">
             <div class="card p-4 shadow-sm border-0">
                 <div class="display-4 mb-2">🛒</div>
@@ -69,8 +66,7 @@ $bekleyenSiparis = $db->query("SELECT COUNT(*) FROM siparisler WHERE durum = 'Be
                 <a href="siparisler.php" class="btn btn-outline-success btn-sm">Git</a>
             </div>
         </div>
-        
-        <?php if(isset($_SESSION['rol']) && $_SESSION['rol'] == 'yonetici'): ?>
+        <?php if($_SESSION['rol'] == 'yonetici'): ?>
         <div class="col-md-4">
             <div class="card p-4 shadow-sm border-0">
                 <div class="display-4 mb-2">👤</div>
@@ -82,6 +78,5 @@ $bekleyenSiparis = $db->query("SELECT COUNT(*) FROM siparisler WHERE durum = 'Be
         <?php endif; ?>
     </div>
 </div>
-
 </body>
 </html>

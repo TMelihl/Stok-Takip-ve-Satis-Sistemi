@@ -33,6 +33,18 @@ $siparisler = $sorgu->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <div class="container mt-2">
+    <?php if(isset($_GET['islem'])): ?>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>İşlem Başarılı!</strong> 
+            <?php 
+                if($_GET['islem'] == 'siparis_alindi') echo "Siparişiniz başarıyla alındı.";
+                if($_GET['islem'] == 'onaylandi') echo "Sipariş onaylandı.";
+                if($_GET['islem'] == 'reddedildi') echo "Sipariş reddedildi.";
+            ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <?php endif; ?>
+
     <div class="d-flex justify-content-between mb-3 align-items-center">
         <h4>📦 Sipariş Yönetimi</h4>
     </div>
@@ -41,19 +53,19 @@ $siparisler = $sorgu->fetchAll(PDO::FETCH_ASSOC);
         <table class="table table-bordered bg-white shadow-sm align-middle">
             <thead class="table-dark">
                 <tr>
-                    <th>Sipariş No</th>
+                    <th>No</th>
                     <th>Müşteri</th>
                     <th>Ürün</th>
                     <th>Adet</th>
-                    <th>Toplam Tutar</th>
+                    <th>Toplam</th>
                     <th>Tarih</th>
                     <th>Durum</th>
-                    <th width="300" class="text-center">Aksiyon / Yetkili</th>
+                    <th width="300" class="text-center">İşlem / Yetkili</th>
                 </tr>
             </thead>
             <tbody>
                 <?php if (count($siparisler) == 0): ?>
-                <tr><td colspan="8" class="text-center text-muted">Hiç sipariş bulunamadı.</td></tr>
+                <tr><td colspan="8" class="text-center text-muted">Henüz kayıtlı bir sipariş yok.</td></tr>
                 <?php endif; ?>
 
                 <?php foreach ($siparisler as $sip): ?>
@@ -64,8 +76,6 @@ $siparisler = $sorgu->fetchAll(PDO::FETCH_ASSOC);
                         <td><span class="badge bg-secondary"><?= $sip['adet'] ?> Adet</span></td>
                         <td><b class="text-success"><?= number_format($sip['toplam_tutar'], 2) ?> ₺</b></td>
                         <td><small class="text-muted"><?= date('d.m.Y H:i', strtotime($sip['tarih'])) ?></small></td>
-
-                        <!-- Durum Rozetleri -->
                         <td>
                             <?php if ($sip['durum'] == 'Beklemede'): ?>
                                 <span class="badge bg-warning text-dark">Beklemede</span>
@@ -75,11 +85,9 @@ $siparisler = $sorgu->fetchAll(PDO::FETCH_ASSOC);
                                 <span class="badge bg-danger">Reddedildi</span>
                             <?php endif; ?>
                         </td>
-
-                        <!-- İşlemler veya Log Kaydı -->
                         <td class="text-center">
                             <?php if ($_SESSION['rol'] != 'musteri' && $sip['durum'] == 'Beklemede'): ?>
-                                <a href="siparis_islem.php?id=<?= $sip['id'] ?>&islem=onay" class="btn btn-success btn-sm" onclick="return confirm('Siparişi SİSTEMDEN DÜŞEREK ONAYLIYOR musunuz?')">✅ Onayla</a>
+                                <a href="siparis_islem.php?id=<?= $sip['id'] ?>&islem=onay" class="btn btn-success btn-sm" onclick="return confirm('Siparişi ONAYLIYOR musunuz?')">✅ Onayla</a>
                                 <a href="siparis_islem.php?id=<?= $sip['id'] ?>&islem=red" class="btn btn-outline-danger btn-sm" onclick="return confirm('Siparişi reddetmek istediğinize emin misiniz?')">❌ Reddet</a>
                             <?php elseif ($sip['durum'] != 'Beklemede'): ?>
                                 <?php 
@@ -100,6 +108,5 @@ $siparisler = $sorgu->fetchAll(PDO::FETCH_ASSOC);
         </table>
     </div>
 </div>
-
 </body>
 </html>
